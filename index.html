@@ -163,6 +163,7 @@
   .rbadge { position: absolute; top: 5px; right: 5px; font-family: 'Cinzel', serif; font-size: 8px; font-weight: 700; padding: 2px 5px; border-radius: 2px; z-index: 2; }
   .rbadge-e { background: rgba(100,80,40,0.7); color: #d4c4a0; border: 0.5px solid rgba(200,180,120,0.5); }
   .rbadge-b { background: rgba(139,26,26,0.7); color: #ff9090; border: 0.5px solid rgba(200,60,60,0.5); }
+  .rbadge-c { background: rgba(60,120,60,0.7); color: #90dd90; border: 0.5px solid rgba(60,180,60,0.5); }
 
   /* DETAIL OVERLAY */
   .detail-overlay { display: none; position: fixed; inset: 0; background: rgba(20,12,4,0.95); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
@@ -305,6 +306,7 @@
           <div class="block-label">Active Sets · 現行セット</div>
           <div class="set-row"><i class="ti ti-leaf" style="color:var(--gold);font-size:20px"></i><div><div class="set-name">Oath: Awakening</div><div class="set-sub">Base Set · E Tier · 10 cards</div></div><div class="set-count" id="baseCount">0 / 10</div></div>
           <div class="set-row"><i class="ti ti-sword" style="color:var(--red2);font-size:20px"></i><div><div class="set-name">First Blood</div><div class="set-sub">Armory Set · B Tier · 10 cards</div></div><div class="set-count" id="armoryCount">0 / 10</div></div>
+          <div class="set-row"><i class="ti ti-coffee" style="color:var(--gold);font-size:20px"></i><div><div class="set-name">Off Duty</div><div class="set-sub">Off Duty Set · C Tier · 10 cards</div></div><div class="set-count" id="offdutyCount">0 / 10</div></div>
         </div>
       </div>
 
@@ -323,6 +325,7 @@
           <button class="ftag" onclick="filterCards('rai',this)">Rai</button>
           <button class="ftag" onclick="filterCards('base',this)">Base</button>
           <button class="ftag" onclick="filterCards('armory',this)">Armory</button>
+          <button class="ftag" onclick="filterCards('offduty',this)">Off Duty</button>
         </div>
         <div class="coll-grid" id="collGrid"></div>
       </div>
@@ -385,26 +388,37 @@
 const BASE = 'https://therfuohfiusdibiwmjz.supabase.co/storage/v1/object/public/cards/';
 
 const CARDS = [
-  {id:'Ren_Base_D',     name:'Ren Kisaragi',    char:'ren',    set:'base',   tier:'E', front:'Ren_Base_D.png',     back:'Base_Back.png'},
-  {id:'Yuzuki_Base_D',  name:'Yuzuki Hanabira', char:'yuzuki', set:'base',   tier:'E', front:'Yuzuki_Base_D.png',  back:'Base_Back.png'},
-  {id:'Haruki_Base_D',  name:'Haruki Hanabira', char:'haruki', set:'base',   tier:'E', front:'Haruki_Base_D.png',  back:'Base_Back.png'},
-  {id:'Takuma_Base_D',  name:'Takuma Yuki',     char:'takuma', set:'base',   tier:'E', front:'Takuma_Base_D.png',  back:'Base_Back.png'},
-  {id:'Hinata_Base_D',  name:'Hinata Koma',     char:'hinata', set:'base',   tier:'E', front:'Hinata_Base_D.png',  back:'Base_Back.png'},
-  {id:'Daigo_Base_D',   name:'Daigo Komine',    char:'daigo',  set:'base',   tier:'E', front:'Daigo_Base_D.png',   back:'Base_Back.png'},
-  {id:'Momiji_Base_D',  name:'Momoji Hime',     char:'momiji', set:'base',   tier:'E', front:'Momiji_Base_D.png',  back:'Base_Back.png'},
-  {id:'Aya_Base_D',     name:'Aya Tsukishiro',  char:'aya',    set:'base',   tier:'E', front:'Aya_Base_D.png',     back:'Base_Back.png'},
-  {id:'Seiji_Base_D',   name:'Seiji Arakawa',   char:'seiji',  set:'base',   tier:'E', front:'Seiji_Base_D.png',   back:'Base_Back.png'},
-  {id:'Rai_Base_D',     name:'Rai Gekizō',      char:'rai',    set:'base',   tier:'E', front:'Rai_Base_D.png',     back:'Base_Back.png'},
-  {id:'Ren_Armory_B',   name:'Ren Kisaragi',    char:'ren',    set:'armory', tier:'B', front:'Ren_Armory_B.png',   back:'Armory_Back.png'},
-  {id:'Yuzuki_Armory_B',name:'Yuzuki Hanabira', char:'yuzuki', set:'armory', tier:'B', front:'Yuzuki_Armory_B.png',back:'Armory_Back.png'},
-  {id:'Haruki_Armory_B',name:'Haruki Hanabira', char:'haruki', set:'armory', tier:'B', front:'Haruki_Armory_B.png',back:'Armory_Back.png'},
-  {id:'Takuma_Armory_B',name:'Takuma Yuki',     char:'takuma', set:'armory', tier:'B', front:'Takuma_Armory_B.png',back:'Armory_Back.png'},
-  {id:'Hinata_Armory_B',name:'Hinata Koma',     char:'hinata', set:'armory', tier:'B', front:'Hinata_Armory_B.png',back:'Armory_Back.png'},
-  {id:'Daigo_Armory_B', name:'Daigo Komine',    char:'daigo',  set:'armory', tier:'B', front:'Daigo_Armory_B.png', back:'Armory_Back.png'},
-  {id:'Momiji_Armory_B',name:'Momoji Hime',     char:'momiji', set:'armory', tier:'B', front:'Momiji_Armory_B.png',back:'Armory_Back.png'},
-  {id:'Aya_Armory_B',   name:'Aya Tsukishiro',  char:'aya',    set:'armory', tier:'B', front:'Aya_Armory_B.png',   back:'Armory_Back.png'},
-  {id:'Seiji_Armory_B', name:'Seiji Arakawa',   char:'seiji',  set:'armory', tier:'B', front:'Seiji_Armory_B.png', back:'Armory_Back.png'},
-  {id:'Rai_Armory_B',   name:'Rai Gekizō',      char:'rai',    set:'armory', tier:'B', front:'Rai_Armory_B.png',   back:'Armory_Back.png'},
+  {id:'Ren_Base_D',     name:'Ren Kisaragi',    char:'ren',    set:'base',   tier:'E', front:'Base/Ren_Base_D.png',     back:'Base/Base_Back.png'},
+  {id:'Yuzuki_Base_D',  name:'Yuzuki Hanabira', char:'yuzuki', set:'base',   tier:'E', front:'Base/Yuzuki_Base_D.png',  back:'Base/Base_Back.png'},
+  {id:'Haruki_Base_D',  name:'Haruki Hanabira', char:'haruki', set:'base',   tier:'E', front:'Base/Haruki_Base_D.png',  back:'Base/Base_Back.png'},
+  {id:'Takuma_Base_D',  name:'Takuma Yuki',     char:'takuma', set:'base',   tier:'E', front:'Base/Takuma_Base_D.png',  back:'Base/Base_Back.png'},
+  {id:'Hinata_Base_D',  name:'Hinata Koma',     char:'hinata', set:'base',   tier:'E', front:'Base/Hinata_Base_D.png',  back:'Base/Base_Back.png'},
+  {id:'Daigo_Base_D',   name:'Daigo Komine',    char:'daigo',  set:'base',   tier:'E', front:'Base/Daigo_Base_D.png',   back:'Base/Base_Back.png'},
+  {id:'Momiji_Base_D',  name:'Momoji Hime',     char:'momiji', set:'base',   tier:'E', front:'Base/Momiji_Base_D.png',  back:'Base/Base_Back.png'},
+  {id:'Aya_Base_D',     name:'Aya Tsukishiro',  char:'aya',    set:'base',   tier:'E', front:'Base/Aya_Base_D.png',     back:'Base/Base_Back.png'},
+  {id:'Seiji_Base_D',   name:'Seiji Arakawa',   char:'seiji',  set:'base',   tier:'E', front:'Base/Seiji_Base_D.png',   back:'Base/Base_Back.png'},
+  {id:'Rai_Base_D',     name:'Rai Gekizō',      char:'rai',    set:'base',   tier:'E', front:'Base/Rai_Base_D.png',     back:'Base/Base_Back.png'},
+  {id:'Ren_Armory_B',   name:'Ren Kisaragi',    char:'ren',    set:'armory', tier:'B', front:'Armory/Ren_Armory_B.png',   back:'Armory/Armory_Back.png'},
+  {id:'Yuzuki_Armory_B',name:'Yuzuki Hanabira', char:'yuzuki', set:'armory', tier:'B', front:'Armory/Yuzuki_Armory_B.png',back:'Armory/Armory_Back.png'},
+  {id:'Haruki_Armory_B',name:'Haruki Hanabira', char:'haruki', set:'armory', tier:'B', front:'Armory/Haruki_Armory_B.png',back:'Armory/Armory_Back.png'},
+  {id:'Takuma_Armory_B',name:'Takuma Yuki',     char:'takuma', set:'armory', tier:'B', front:'Armory/Takuma_Armory_B.png',back:'Armory/Armory_Back.png'},
+  {id:'Hinata_Armory_B',name:'Hinata Koma',     char:'hinata', set:'armory', tier:'B', front:'Armory/Hinata_Armory_B.png',back:'Armory/Armory_Back.png'},
+  {id:'Daigo_Armory_B', name:'Daigo Komine',    char:'daigo',  set:'armory', tier:'B', front:'Armory/Daigo_Armory_B.png', back:'Armory/Armory_Back.png'},
+  {id:'Momiji_Armory_B',name:'Momoji Hime',     char:'momiji', set:'armory', tier:'B', front:'Armory/Momiji_Armory_B.png',back:'Armory/Armory_Back.png'},
+  {id:'Aya_Armory_B',   name:'Aya Tsukishiro',  char:'aya',    set:'armory', tier:'B', front:'Armory/Aya_Armory_B.png',   back:'Armory/Armory_Back.png'},
+  {id:'Seiji_Armory_B', name:'Seiji Arakawa',   char:'seiji',  set:'armory', tier:'B', front:'Armory/Seiji_Armory_B.png', back:'Armory/Armory_Back.png'},
+  {id:'Rai_Armory_B',   name:'Rai Gekizō',      char:'rai',    set:'armory', tier:'B', front:'Armory/Rai_Armory_B.png',   back:'Armory/Armory_Back.png'},
+  // OFF DUTY SET
+  {id:'Ren_OffDuty_C',   name:'Ren Kisaragi',    char:'ren',    set:'offduty', tier:'C', front:'OffDuty/Ren_OffDuty_C.png',   back:'OffDuty/OffDuty_Back.png'},
+  {id:'Yuzuki_OffDuty_C',name:'Yuzuki Hanabira', char:'yuzuki', set:'offduty', tier:'C', front:'OffDuty/Yuzuki_OffDuty_C.png', back:'OffDuty/OffDuty_Back.png'},
+  {id:'Haruki_OffDuty_C',name:'Haruki Hanabira', char:'haruki', set:'offduty', tier:'C', front:'OffDuty/Haruki_OffDuty_C.png', back:'OffDuty/OffDuty_Back.png'},
+  {id:'Takuma_OffDuty_C',name:'Takuma Yuki',     char:'takuma', set:'offduty', tier:'C', front:'OffDuty/Takuma_OffDuty_C.png', back:'OffDuty/OffDuty_Back.png'},
+  {id:'Hinata_OffDuty_C',name:'Hinata Koma',     char:'hinata', set:'offduty', tier:'C', front:'OffDuty/Hinata_OffDuty_C.png', back:'OffDuty/OffDuty_Back.png'},
+  {id:'Daigo_OffDuty_C', name:'Daigo Komine',    char:'daigo',  set:'offduty', tier:'C', front:'OffDuty/Daigo_OffDuty_C.png',  back:'OffDuty/OffDuty_Back.png'},
+  {id:'Momiji_OffDuty_C',name:'Momoji Hime',     char:'momiji', set:'offduty', tier:'C', front:'OffDuty/Momiji_OffDuty_C.png', back:'OffDuty/OffDuty_Back.png'},
+  {id:'Aya_OffDuty_C',   name:'Aya Tsukishiro',  char:'aya',    set:'offduty', tier:'C', front:'OffDuty/Aya_OffDuty_C.png',   back:'OffDuty/OffDuty_Back.png'},
+  {id:'Seiji_OffDuty_C', name:'Seiji Arakawa',   char:'seiji',  set:'offduty', tier:'C', front:'OffDuty/Seiji_OffDuty_C.png', back:'OffDuty/OffDuty_Back.png'},
+  {id:'Rai_OffDuty_C',   name:'Rai Gekizō',      char:'rai',    set:'offduty', tier:'C', front:'OffDuty/Rai_OffDuty_C.png',   back:'OffDuty/OffDuty_Back.png'},
 ];
 
 let collection = new Set();
@@ -440,8 +454,46 @@ function toggleFullscreen() {
 function updateCounts() {
   document.getElementById('baseCount').textContent = `${CARDS.filter(c=>c.set==='base'&&collection.has(c.id)).length} / 10`;
   document.getElementById('armoryCount').textContent = `${CARDS.filter(c=>c.set==='armory'&&collection.has(c.id)).length} / 10`;
+  document.getElementById('offdutyCount').textContent = `${CARDS.filter(c=>c.set==='offduty'&&collection.has(c.id)).length} / 10`;
   document.getElementById('spiritsVal').textContent = spirits.toLocaleString();
   document.getElementById('goldVal').textContent = gold;
+}
+
+function buildPack(type) {
+  const baseCards = CARDS.filter(c => c.set === 'base');
+  const armoryCards = CARDS.filter(c => c.set === 'armory');
+  const offdutyCards = CARDS.filter(c => c.set === 'offduty');
+  const result = [];
+
+  if(type === 'standard') {
+    // 95% base, 5% armory, max 1 armory
+    let armoryUsed = 0;
+    for(let i = 0; i < 5; i++) {
+      const roll = Math.random();
+      if(roll < 0.05 && armoryUsed < 1) {
+        result.push(armoryCards[Math.floor(Math.random()*armoryCards.length)]);
+        armoryUsed++;
+      } else {
+        const pool = [...baseCards, ...offdutyCards];
+        result.push(pool[Math.floor(Math.random()*pool.length)]);
+      }
+    }
+  } else {
+    // Beast pack: 40% base, 30% offduty, 30% armory, max 2 armory
+    let armoryUsed = 0;
+    for(let i = 0; i < 5; i++) {
+      const roll = Math.random();
+      if(roll < 0.30 && armoryUsed < 2) {
+        result.push(armoryCards[Math.floor(Math.random()*armoryCards.length)]);
+        armoryUsed++;
+      } else if(roll < 0.60) {
+        result.push(offdutyCards[Math.floor(Math.random()*offdutyCards.length)]);
+      } else {
+        result.push(baseCards[Math.floor(Math.random()*baseCards.length)]);
+      }
+    }
+  }
+  return result;
 }
 
 function fireParticles(x, y, type) {
@@ -501,8 +553,7 @@ function openPack(type) {
   else gold-=5;
   updateCounts();
 
-  const pool = type==='standard' ? CARDS.filter(c=>c.set==='base') : CARDS;
-  currentPack = [...pool].sort(()=>Math.random()-0.5).slice(0,5);
+  currentPack = buildPack(type);
   revealedCount = 0;
 
   const reveal = document.getElementById('cardsReveal');
